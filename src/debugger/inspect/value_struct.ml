@@ -60,7 +60,7 @@ class record_value ~scene ~typenv ~obj ?(pos = 0) ?(unboxed = false) ~members ()
   object
     inherit struct_value ~scene ~typenv ~obj ~pos ~unboxed ~members
 
-    method to_short_string = "<record>" (* DBG: xujie "{…}" *)
+    method to_short_string = "<record> " ^ (string_of_int (List.length members)) ^ " members" (* DBG: xujie "{…}" *)
   end
 
 class variant_value ~tag ?payload ?(embed = false) () =
