@@ -32,6 +32,12 @@ class char_value v =
     method to_short_string = "'" ^ Char.escaped v ^ "'"
   end
 
+class ichar_value v = 
+  object
+    inherit value
+    method to_short_string = (Int.to_string v) ^ " " ^ Char.escaped (Char.chr v)
+  end
+
 class string_value v =
   object
     inherit value
@@ -47,7 +53,8 @@ class bytes_value v =
 
     method! num_indexed = Bytes.length v
 
-    method! get_indexed i = Lwt.return (new int_value (Bytes.get_uint8 v i))
+    (* method! get_indexed i = Lwt.return (new int_value (Bytes.get_uint8 v i)) *)
+    method! get_indexed i = Lwt.return (new ichar_value (Bytes.get_uint8 v i)) (* DBG: xujie *)
   end
 
 class float_value v =
