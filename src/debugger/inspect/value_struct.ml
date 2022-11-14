@@ -50,7 +50,7 @@ class tuple_value ~scene ~typenv ~obj ?(pos = 0) ?(unboxed = false) ~members ()
       let num_named = self#num_named in
       if num_named = 0 then "()"
       else if num_named = 1 then "‹1›"
-      else if num_named = 2 then "(‹1›, ‹2›)"
+      else if num_named = 2 then  "(2 args)" (* DBG: xujie "(‹1›, ‹2›)" *)
       else if num_named = 3 then "(‹1›, ‹2›, ‹3›)"
       else "(‹1›, ‹2›, …)"
   end
@@ -60,7 +60,7 @@ class record_value ~scene ~typenv ~obj ?(pos = 0) ?(unboxed = false) ~members ()
   object
     inherit struct_value ~scene ~typenv ~obj ~pos ~unboxed ~members
 
-    method to_short_string = "{…}"
+    method to_short_string = "<record>" (* DBG: xujie "{…}" *)
   end
 
 class variant_value ~tag ?payload ?(embed = false) () =

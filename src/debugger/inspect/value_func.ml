@@ -22,7 +22,7 @@ class func_value ?pc ?loc () =
   object
     inherit value
 
-    method to_short_string = "«fun»"
+    method to_short_string = "<lambda>" (* DBG: xujie "«fun»" *)
 
     method! vscode_menu_context = Some "ocamlearlybird.function"
 

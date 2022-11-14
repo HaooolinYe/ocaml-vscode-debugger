@@ -60,7 +60,7 @@ class tips_value tips =
   object
     inherit value
 
-    method to_short_string = "…"
+    method to_short_string =  "xxx"  (* DBG: xujie "…" *)
 
     method! num_indexed = Array.length tips
 
