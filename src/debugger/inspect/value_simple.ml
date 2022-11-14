@@ -35,7 +35,7 @@ class char_value v =
 class ichar_value v = 
   object
     inherit value
-    method to_short_string = (Int.to_string v) ^ " '" ^ Char.escaped (Char.chr v) ^ "'"
+    method to_short_string = Printf.sprintf "%4d ('%c')" v (Char.chr v)
   end
 
 class string_value v =
