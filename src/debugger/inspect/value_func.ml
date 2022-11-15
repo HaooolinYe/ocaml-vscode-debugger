@@ -28,7 +28,7 @@ class func_value ?pc ?loc () =
 
     method! closure_code_location = loc
 
-    method! num_named = 1
+    method! num_named = 0 (* 1 *)
 
     method! list_named = Lwt.return []
     (*
