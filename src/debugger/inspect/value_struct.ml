@@ -211,7 +211,7 @@ let adopter scene typenv obj typ =
                    (new record_value
                       ~scene ~typenv ~obj ~pos:0 ~unboxed ~members ()))
         in
-        let tag = Ident.name constr.cd_id in
+        let tag = (Ident.name constr.cd_id) ^ "_dbg-tag" in
         Lwt.return (Some (new variant_value ~tag ?payload ~embed:true ()))
   in
   match (Ctype.repr typ).desc with
