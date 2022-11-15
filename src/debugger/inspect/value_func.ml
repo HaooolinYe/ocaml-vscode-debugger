@@ -22,7 +22,7 @@ class func_value ?pc ?loc () =
   object
     inherit value
 
-    method to_short_string = "<lambda>" (* DBG: xujie "«fun»" *)
+    method to_short_string = "λ◼️ " (* DBG: xujie "«fun»" *)
 
     method! vscode_menu_context = Some "ocamlearlybird.function"
 
@@ -30,13 +30,15 @@ class func_value ?pc ?loc () =
 
     method! num_named = 1
 
-    method! list_named =
+    method! list_named = Lwt.return []
+    (*
       Lwt.return
         [
           ( "‹tips›",
             new tips_value
               [| "You can use context menu to goto closure code location." |] );
         ]
+    *)
   end
 
 let adopter scene typenv obj typ =
