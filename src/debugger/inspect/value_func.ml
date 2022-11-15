@@ -24,6 +24,7 @@ class func_value ?pc ?loc () =
 
     method to_short_string = "λ◼️ " (* DBG: xujie "«fun»" *)
 
+    (*
     method! vscode_menu_context = Some "ocamlearlybird.function"
 
     method! closure_code_location = loc
@@ -31,6 +32,7 @@ class func_value ?pc ?loc () =
     method! num_named = 0 (* 1 *)
 
     method! list_named = Lwt.return []
+    *)
     (*
       Lwt.return
         [
