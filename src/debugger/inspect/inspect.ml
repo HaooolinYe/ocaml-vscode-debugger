@@ -32,8 +32,8 @@ let () =
   Value_basic.adopters :=
     [
       Value_simple.adopter;
-      Value_struct.adopter;
       Value_list.adopter;
+      Value_struct.adopter;
       Value_array.adopter;
       Value_func.adopter;
       Value_module.adopter;
