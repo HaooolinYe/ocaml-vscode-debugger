@@ -30,12 +30,19 @@ class list_value ~scene ~typenv ~obj ~element_type () =
 
     method to_short_string =
       begin
-        Lwt_main.run
+        if Scene.is_block obj then 
+          match obj with
+          | Scene.Local v when Obj.is_block (Obj.field v 1) -> "‹hd› :: ‹tl›"
+          | _ ->  "[e]"      
+        else 
+          "list_empty_buggy"
+
+        (* Lwt_main.run
           (let%lwt obj' = Scene.get_field scene obj 1 in
             if Scene.is_block obj' then
               Lwt.return "‹hd› :: ‹tl›"
             else 
-              Lwt.return "[e]")
+              Lwt.return "[e]") *)
       end
 
 
