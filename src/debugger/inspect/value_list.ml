@@ -28,7 +28,16 @@ class list_value ~scene ~typenv ~obj ~element_type () =
   object
     inherit value
 
-    method to_short_string = "‹hd› :: ‹tl›"
+    method to_short_string =
+      begin
+        Lwt_main.run
+          (let%lwt obj' = Scene.get_field scene obj 1 in
+            if Scene.is_block obj' then
+              Lwt.return "‹hd› :: ‹tl›"
+            else 
+              Lwt.return "[e]")
+      end
+
 
     method! num_named = 2
 
@@ -39,7 +48,11 @@ class list_value ~scene ~typenv ~obj ~element_type () =
       in
       let%lwt tl =
         let%lwt obj' = Scene.get_field scene obj 1 in
-        Lwt.return (new list_value ~scene ~typenv ~obj:obj' ~element_type ())
+
+        if Scene.is_block obj' then
+          Lwt.return (new list_value ~scene ~typenv ~obj:obj' ~element_type ())
+        else 
+          Lwt.return (nil_value)
       in
       Lwt.return [ ("‹hd›", hd); ("‹tl›", tl) ]
   end

@@ -32,7 +32,7 @@ let () =
   Value_basic.adopters :=
     [
       Value_simple.adopter;
-      Value_list.adopter;
+      Value_list.adopter;  (* should appear before struct, otherwise :: is treated as a normal constructor *)
       Value_struct.adopter;
       Value_array.adopter;
       Value_func.adopter;
