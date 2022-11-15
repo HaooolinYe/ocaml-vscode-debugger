@@ -70,7 +70,7 @@ class variant_value ~tag ?payload ?(embed = false) () =
     method to_short_string =
       match payload with
       | Some payload ->
-          if embed then tag ^ " " ^ payload#to_short_string
+          if embed then tag ^ "_variant " ^ payload#to_short_string
           else tag ^ " ‹1›"
       | None -> tag
 
