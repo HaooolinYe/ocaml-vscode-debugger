@@ -68,15 +68,15 @@ class record_value ~scene ~typenv ~obj ?(pos = 0) ?(unboxed = false) ~members ()
 
     method to_short_string = 
       (* DBG: xujie "{…}" *)
-      let k = 5 in 
+      let k = 4 in 
       if (List.length members) <= k then 
         let r = members |> List.map (fun (x,_) -> x) |> String.concat "," in 
         "{" ^ r ^ "}"
       else
         begin
           let first_k = List.init k (fun x -> x) |> List.map (List.nth members) in 
-          let r = List.map (fun (x,_) -> x) first_k |> String.concat "," in 
-          "{" ^ r ^ ", ...} " ^ (string_of_int (List.length members)) ^ " members"
+          let r = List.map (fun (x,_) -> x) first_k |> String.concat ", " in 
+          "{" ^ r ^ ", …" ^ (string_of_int (List.length members)) ^ " members}"
 
           (* "<record> " ^ (string_of_int (List.length members)) ^ " members"  *)
         end
@@ -93,7 +93,7 @@ class variant_value ~tag ?payload ?(embed = false) () =
     method to_short_string =
       match payload with
       | Some payload ->
-          if embed then tag ^ "_variant " ^ payload#to_short_string
+          if embed then tag ^ payload#to_short_string
           else tag ^ " ‹1›"
       | None -> tag
 
