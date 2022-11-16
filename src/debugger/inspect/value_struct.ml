@@ -41,7 +41,7 @@ class tuple_value ~scene ~typenv ~obj ?(pos = 0) ?(unboxed = false) ~members ()
   =
   let members =
     members
-    |> List.mapi (fun i typ -> ("‹arg-" ^ string_of_int (i + 1) ^ ":" ^ "›", typ))
+    |> List.mapi (fun i typ -> ("‹arg" ^ string_of_int (i + 1) ^ "›", typ))
   in
   object (self)
     inherit struct_value ~scene ~typenv ~obj ~pos ~unboxed ~members
@@ -50,7 +50,7 @@ class tuple_value ~scene ~typenv ~obj ?(pos = 0) ?(unboxed = false) ~members ()
       let num_named = self#num_named in
       let range = List.init num_named (fun x -> x + 1) in 
       let r = 
-      range |> List.map (fun x -> Printf.sprintf "‹%d›" x) |> String.concat ", " 
+      range |> List.map (fun x -> Printf.sprintf "‹arg%d›" x) |> String.concat ", " 
       in "(" ^ r ^ ")"
 (* 
       if num_named = 0 then "()"
@@ -68,11 +68,18 @@ class record_value ~scene ~typenv ~obj ?(pos = 0) ?(unboxed = false) ~members ()
 
     method to_short_string = 
       (* DBG: xujie "{…}" *)
-      if (List.length members) <= 5 then 
+      let k = 5 in 
+      if (List.length members) <= k then 
         let r = members |> List.map (fun (x,_) -> x) |> String.concat "," in 
         "{" ^ r ^ "}"
       else
-        "<record> " ^ (string_of_int (List.length members)) ^ " members" 
+        begin
+          let first_k = List.init k (fun x -> x) |> List.map (List.nth members) in 
+          let r = List.map (fun (x,_) -> x) first_k |> String.concat "," in 
+          "{" ^ r ^ ", ...} " ^ (string_of_int (List.length members)) ^ " members"
+
+          (* "<record> " ^ (string_of_int (List.length members)) ^ " members"  *)
+        end
   end
 
 (* 
@@ -227,7 +234,7 @@ let adopter scene typenv obj typ =
                    (new record_value
                       ~scene ~typenv ~obj ~pos:0 ~unboxed ~members ()))
         in
-        let tag = (Ident.name constr.cd_id) ^ "_dbg-tag" in
+        let tag = (Ident.name constr.cd_id)  in
         Lwt.return (Some (new variant_value ~tag ?payload ~embed:true ()))
   in
   match (Ctype.repr typ).desc with
