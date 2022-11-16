@@ -41,18 +41,24 @@ class tuple_value ~scene ~typenv ~obj ?(pos = 0) ?(unboxed = false) ~members ()
   =
   let members =
     members
-    |> List.mapi (fun i typ -> ("‹" ^ string_of_int (i + 1) ^ "›", typ))
+    |> List.mapi (fun i typ -> ("‹arg-" ^ string_of_int (i + 1) ^ ":" ^ "›", typ))
   in
   object (self)
     inherit struct_value ~scene ~typenv ~obj ~pos ~unboxed ~members
 
     method to_short_string =
       let num_named = self#num_named in
+      let range = List.init num_named (fun x -> x + 1) in 
+      let r = 
+      range |> List.map (fun x -> Printf.sprintf "‹%d›" x) |> String.concat ", " 
+      in "(" ^ r ^ ")"
+(* 
       if num_named = 0 then "()"
       else if num_named = 1 then "‹1›"
-      else if num_named = 2 then  "(2 args)" (* DBG: xujie "(‹1›, ‹2›)" *)
+      else if num_named = 2 then  "(‹1›, ‹2›)" (* DBG: xujie "(‹1›, ‹2›)" *)
       else if num_named = 3 then "(‹1›, ‹2›, ‹3›)"
-      else "(‹1›, ‹2›, …)"
+      else "(‹1›, ‹2›, ‹3›, …)"
+*)      
   end
 
 class record_value ~scene ~typenv ~obj ?(pos = 0) ?(unboxed = false) ~members ()
@@ -69,6 +75,10 @@ class record_value ~scene ~typenv ~obj ?(pos = 0) ?(unboxed = false) ~members ()
         "<record> " ^ (string_of_int (List.length members)) ^ " members" 
   end
 
+(* 
+ * variant value captures user-defined constructors 
+ * more accurately, any constructors that do not have a special `X_value class`  
+*)  
 class variant_value ~tag ?payload ?(embed = false) () =
   object
     inherit value
