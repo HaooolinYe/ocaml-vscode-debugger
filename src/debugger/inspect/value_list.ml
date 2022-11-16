@@ -29,11 +29,14 @@ class list_value ~scene ~typenv ~obj ~element_type () =
     inherit value
 
     method to_short_string =
+      let single_str = "[e]" in 
+      let many_str = "‹hd› :: ‹tl›" in 
+      let choose_name cond = if cond then many_str else single_str in 
       begin
         if Scene.is_block obj then 
           match obj with
-          | Scene.Local v when Obj.is_block (Obj.field v 1) -> "‹hd› :: ‹tl›"
-          | _ ->  "[ e ]"      
+          | Scene.Local v  -> Obj.is_block (Obj.field v 1) |> choose_name
+          | Remote rv -> Obj.is_block (Array.unsafe_get (Obj.magic rv : Obj.t array) 1) |> choose_name
         else 
           "list_empty_buggy"
 
