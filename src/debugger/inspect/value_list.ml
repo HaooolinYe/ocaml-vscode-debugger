@@ -33,7 +33,7 @@ class list_value ~scene ~typenv ~obj ~element_type () =
         if Scene.is_block obj then 
           match obj with
           | Scene.Local v when Obj.is_block (Obj.field v 1) -> "‹hd› :: ‹tl›"
-          | _ ->  "[e]"      
+          | _ ->  "[ e ]"      
         else 
           "list_empty_buggy"
 
@@ -53,15 +53,20 @@ class list_value ~scene ~typenv ~obj ~element_type () =
         let%lwt obj' = Scene.get_field scene obj 0 in
         adopt scene typenv obj' element_type
       in
-      let%lwt tl =
-        let%lwt obj' = Scene.get_field scene obj 1 in
-
-        if Scene.is_block obj' then
-          Lwt.return (new list_value ~scene ~typenv ~obj:obj' ~element_type ())
-        else 
-          Lwt.return (nil_value)
+      
+      let%lwt obj' = Scene.get_field scene obj 1 
       in
-      Lwt.return [ ("‹hd›", hd); ("‹tl›", tl) ]
+
+      if Scene.is_block obj' then
+        begin
+          let%lwt tl =
+          Lwt.return (new list_value ~scene ~typenv ~obj:obj' ~element_type ())
+          in Lwt.return [ ("‹hd›", hd); ("‹tl›", tl) ]
+        end
+      else 
+        Lwt.return [ ("‹hd›", hd)]
+          (* Lwt.return (nil_value) *)
+      (* Lwt.return [ ("‹hd›", hd); ("‹tl›", tl) ] *)
   end
 
 let adopter scene typenv obj typ =
