@@ -36,11 +36,13 @@ class list_value ~scene ~typenv ~obj ~element_type () =
         if Scene.is_block obj then 
           match obj with
           | Scene.Local v  -> Obj.is_block (Obj.field v 1) |> choose_name
-          | Remote rv -> 
+          | Remote rv -> "list"
+            (* 
             "list remote-rv: " ^ 
             string_of_bool (Obj.is_block (Array.unsafe_get (Obj.magic rv : Obj.t array) 0))
             ^ 
             string_of_bool (Obj.is_block (Array.unsafe_get (Obj.magic rv : Obj.t array) 1))
+            *)
             (* Obj.is_block (Array.unsafe_get (Obj.magic rv : Obj.t array) 1) |> choose_name *)
         else 
           "list_empty_buggy"
