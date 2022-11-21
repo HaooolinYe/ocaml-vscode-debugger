@@ -71,7 +71,7 @@ class list_value ~scene ~typenv ~obj ~element_type () =
         begin
           let%lwt tl =
           Lwt.return (new list_value ~scene ~typenv ~obj:obj' ~element_type ())
-          in Lwt.return [ ("‹hd›", hd); ("‹tl›", tl) ]
+          in Lwt.return [ ("‹hd›", hd); ("‹tl›", tl); ("nil_test", nil_value); ("nil_test", nil_value) ]
         end
       else 
         Lwt.return [ ("‹hd›", hd)]
