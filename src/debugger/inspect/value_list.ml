@@ -59,6 +59,24 @@ class list_value ~scene ~typenv ~obj ~element_type () =
     method! num_named = 2
 
     method! list_named =
+      let rec unroll_obj cur_obj k = 
+        let index_str = "‹" ^ (string_of_int k) ^ "›" in
+        let%lwt hd =
+          let%lwt obj' = Scene.get_field scene cur_obj 0 in adopt scene typenv obj' element_type
+        in
+      
+        let%lwt obj' = Scene.get_field scene cur_obj 1 in
+        
+        if Scene.is_block obj' then
+          let%lwt res = (unroll_obj obj' (k+1)) in 
+          Lwt.return ((index_str,hd) :: res)
+        else
+          Lwt.return [(index_str, hd)]
+      in 
+
+      unroll_obj obj 0
+      
+      (*
       let%lwt hd =
         let%lwt obj' = Scene.get_field scene obj 0 in
         adopt scene typenv obj' element_type
@@ -77,6 +95,7 @@ class list_value ~scene ~typenv ~obj ~element_type () =
         Lwt.return [ ("‹hd›", hd)]
           (* Lwt.return (nil_value) *)
       (* Lwt.return [ ("‹hd›", hd); ("‹tl›", tl) ] *)
+      *)
   end
 
 let adopter scene typenv obj typ =
